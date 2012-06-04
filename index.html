@@ -1,0 +1,21 @@
+<html>
+<head>
+	<title>Virtual Phone Toss</title>
+	<style>
+		BODY { margin: 0; padding: 0; }
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		if (/iPhone|iPad/.test(navigator.userAgent)) {
+			window.location.href = "iphone.html";
+		}
+		else if (/Android|Blackberry|Windows Phone/.test(navigator.userAgent)) {
+			window.location.href = "sorry.html";
+		}
+		else {
+			window.location.href = "display.html";
+		}
+	</script>
+</body>
+</html>

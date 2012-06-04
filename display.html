@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PhoneToss Display</title>
+<meta charset="utf-8">
+
+<style>
+	body {
+		background-color: #000000;
+		margin: 0px;
+		overflow: hidden;
+	}
+
+	#container2d {
+		width: 540px;
+		height: 240px;
+		position: absolute;
+		z-index: 10000;
+		top: 0px;
+		left: 0px;
+		background-color: #333399;
+		border: 1px solid red;
+		display:none;	
+	}
+
+	h1 {
+		position:absolute;
+		z-index: 5000;
+		color: #ccc;
+		font-family: sans-serif;
+		top: 0px;
+		font-size: 40pt;
+		width: 100%;
+		text-align: center;
+		-webkit-transform: rotate(-180deg);
+		-webkit-transform: scale(-1, 1);
+	}
+
+	h2 {
+		position:absolute;
+		z-index: 5000;
+		color: #9999ff;
+		font-family: sans-serif;
+		top: 70px;
+		font-size: 20pt;
+		width: 100%;
+		text-align: center;
+		-webkit-transform: rotate(-180deg);
+		-webkit-transform: scale(-1, 1);
+
+	}
+</style>
+	<script type="text/javascript" src="socket.io.js"></script>
+	<script type="text/javascript" src="Three.js"></script>
+
+	<!--[if IE]><script type="text/javascript" src="box2d/lib/excanvas.js"></script><![endif]-->
+    <script src="box2d/lib/prototype-1.6.0.2.js"></script>
+
+	<!-- box2djs -->
+    <script src='box2d/js/box2d/common/b2Settings.js'></script>
+    <script src='box2d/js/box2d/common/math/b2Vec2.js'></script>
+    <script src='box2d/js/box2d/common/math/b2Mat22.js'></script>
+    <script src='box2d/js/box2d/common/math/b2Math.js'></script>
+    <script src='box2d/js/box2d/collision/b2AABB.js'></script>
+    <script src='box2d/js/box2d/collision/b2Bound.js'></script>
+    <script src='box2d/js/box2d/collision/b2BoundValues.js'></script>
+    <script src='box2d/js/box2d/collision/b2Pair.js'></script>
+    <script src='box2d/js/box2d/collision/b2PairCallback.js'></script>
+    <script src='box2d/js/box2d/collision/b2BufferedPair.js'></script>
+    <script src='box2d/js/box2d/collision/b2PairManager.js'></script>
+    <script src='box2d/js/box2d/collision/b2BroadPhase.js'></script>
+    <script src='box2d/js/box2d/collision/b2Collision.js'></script>
+    <script src='box2d/js/box2d/collision/Features.js'></script>
+    <script src='box2d/js/box2d/collision/b2ContactID.js'></script>
+    <script src='box2d/js/box2d/collision/b2ContactPoint.js'></script>
+    <script src='box2d/js/box2d/collision/b2Distance.js'></script>
+    <script src='box2d/js/box2d/collision/b2Manifold.js'></script>
+    <script src='box2d/js/box2d/collision/b2OBB.js'></script>
+    <script src='box2d/js/box2d/collision/b2Proxy.js'></script>
+    <script src='box2d/js/box2d/collision/ClipVertex.js'></script>
+    <script src='box2d/js/box2d/collision/shapes/b2Shape.js'></script>
+    <script src='box2d/js/box2d/collision/shapes/b2ShapeDef.js'></script>
+    <script src='box2d/js/box2d/collision/shapes/b2BoxDef.js'></script>
+    <script src='box2d/js/box2d/collision/shapes/b2CircleDef.js'></script>
+    <script src='box2d/js/box2d/collision/shapes/b2CircleShape.js'></script>
+    <script src='box2d/js/box2d/collision/shapes/b2MassData.js'></script>
+    <script src='box2d/js/box2d/collision/shapes/b2PolyDef.js'></script>
+    <script src='box2d/js/box2d/collision/shapes/b2PolyShape.js'></script>
+    <script src='box2d/js/box2d/dynamics/b2Body.js'></script>
+    <script src='box2d/js/box2d/dynamics/b2BodyDef.js'></script>
+    <script src='box2d/js/box2d/dynamics/b2CollisionFilter.js'></script>
+    <script src='box2d/js/box2d/dynamics/b2Island.js'></script>
+    <script src='box2d/js/box2d/dynamics/b2TimeStep.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2ContactNode.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2Contact.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2ContactConstraint.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2ContactConstraintPoint.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2ContactRegister.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2ContactSolver.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2CircleContact.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2Conservative.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2NullContact.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2PolyAndCircleContact.js'></script>
+    <script src='box2d/js/box2d/dynamics/contacts/b2PolyContact.js'></script>
+    <script src='box2d/js/box2d/dynamics/b2ContactManager.js'></script>
+    <script src='box2d/js/box2d/dynamics/b2World.js'></script>
+    <script src='box2d/js/box2d/dynamics/b2WorldListener.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2JointNode.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2Joint.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2JointDef.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2DistanceJoint.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2DistanceJointDef.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2Jacobian.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2GearJoint.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2GearJointDef.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2MouseJoint.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2MouseJointDef.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2PrismaticJoint.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2PrismaticJointDef.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2PulleyJoint.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2PulleyJointDef.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2RevoluteJoint.js'></script>
+    <script src='box2d/js/box2d/dynamics/joints/b2RevoluteJointDef.js'></script>
+
+	<script src='box2d/demos/draw_world.js'></script>
+</head>
+<body>
+	<h1>Virtual iPhone Toss</h1>
+	<h2>Visit throw.itat.me with your iPhone</h2>
+	<div id="container"></div>
+	<div id="container2d"><canvas id='canvas2d' width='540' height='240'></canvas></div>
+
+	<script>
+		// Oh god don't look at this..
+		window.setTimeout(function() { window.location.reload(); },15*60*1000);
+
+		var socket, container, scene, camera, materials, renderer, world, context2d, floorMaterials;
+		var phones = [];
+
+		function init() {
+			socket = io.connect(':8000');
+			socket.on('tossed', function(id, force) {
+				addPhone((Math.random()*Math.PI+Math.PI/2)*(Math.random()>0.5 ? -1: 1), Math.random()*30-15, force/50); 
+			});
+
+			if (/debug=true/.test(window.location.href)) { document.getElementById('container2d').style.display = "block" };
+
+			container = document.getElementById('container');
+			scene = new THREE.Scene();
+			camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 1, 30000);
+			camera.position.z = 550;
+			scene.add(camera);
+
+    		materials = [
+				new THREE.MeshLambertMaterial({ color: 0xdddde4 }),
+				new THREE.MeshLambertMaterial({ color: 0xdddde4 }),
+				new THREE.MeshLambertMaterial({ color: 0xdddde4 }),
+				new THREE.MeshLambertMaterial({ color: 0xdddde4 }),
+				new THREE.MeshLambertMaterial({ color: 0xffffff, map: THREE.ImageUtils.loadTexture('iphone-front.png') }),
+				new THREE.MeshLambertMaterial({ color: 0xffffff, map: THREE.ImageUtils.loadTexture('iphone-rear.png') })
+   	 		];
+
+    		floorMaterials = [
+				new THREE.MeshLambertMaterial({ color: 0xdddde4 }),
+				new THREE.MeshLambertMaterial({ color: 0xdddde4 }),
+				new THREE.MeshLambertMaterial({ color: 0xdddde4 }),
+				new THREE.MeshLambertMaterial({ color: 0xdddde4 }),
+				new THREE.MeshLambertMaterial({ color: 0xffffff, map: THREE.ImageUtils.loadTexture('water.jpg') }),
+				new THREE.MeshLambertMaterial({ color: 0xffffff, map: THREE.ImageUtils.loadTexture('iphone-rear.png') })
+   	 		];
+			scene.add(new THREE.AmbientLight(0x999999));
+
+			addFloor();
+
+    		renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			container.appendChild(renderer.domElement);
+
+			var worldAABB = new b2AABB();
+			worldAABB.minVertex.Set(-1000,-1000);
+			worldAABB.maxVertex.Set(1000,1000);
+			var gravity = new b2Vec2(0,300);
+			world = new b2World(worldAABB, gravity, true);
+		
+			create2dPoly(world, 0, 230, [[-10,0],[540+10,0],[540+10,10],[-10,10]], true);
+			context2d = $('canvas2d').getContext('2d');
+
+			window.setInterval(step,10);
+			window.setTimeout(function() { socket.emit("rdebug","Display started"); }, 1000);
+			animate();
+		}
+
+		function create2dCircle(world, x, y, radius, linearVelocity, angularVelocity) {
+			var circleSd = new b2CircleDef();
+			circleSd.density = 1.0;
+			circleSd.radius = radius;
+			circleSd.restitution = 0.8;
+			circleSd.friction = 15;
+			var circleBd = new b2BodyDef();
+			circleBd.AddShape(circleSd);
+			circleBd.position.Set(x,y);
+			circleBd.linearVelocity = new b2Vec2(linearVelocity.x, linearVelocity.y);
+			circleBd.angularVelocity = angularVelocity;
+			return world.CreateBody(circleBd);	
+		}
+
+		function create2dPoly(world, x, y, points, fixed) {
+			var polySd = new b2PolyDef();
+			if (!fixed) polySd.density = 1.0;
+			polySd.vertexCount = points.length;
+			for (var i = 0; i < points.length; i++) {
+				polySd.vertices[i].Set(points[i][0], points[i][1]);
+			}
+			var polyBd = new b2BodyDef();
+			polyBd.AddShape(polySd);
+			polyBd.position.Set(x,y);
+			return world.CreateBody(polyBd)
+		}
+
+		function step() {
+			world.Step(1.0/60, 1);
+		}
+
+		function addFloor() {
+			var cube = new THREE.CubeGeometry(30000,50000,5,4,4,2,floorMaterials);
+			var mesh = new THREE.Mesh(cube, new THREE.MeshFaceMaterial());
+			mesh.position.x = 0;
+			mesh.position.y = -1300;
+			mesh.position.z = -100;
+			mesh.rotation.x = -3.14/2;
+			scene.add(mesh);
+		}
+
+		function addPhone(rotation, angle, speed) {
+			var physics = create2dCircle(world, 0, 200, 10, { x:speed , y:-speed*2 }, rotation);
+			var cube = new THREE.CubeGeometry(254, 493, 30, 4, 4, 2, materials);
+			var mesh = new THREE.Mesh(cube, new THREE.MeshFaceMaterial());
+			mesh.isPhone = true;
+			mesh.position.x = 1000-Math.random()*2000;
+			mesh.rotation.x = -3.14/2.2;
+			mesh.physics = physics;
+			mesh.angle = angle;
+			phones.push(mesh);
+			scene.add(mesh);
+			console.log("rotation="+rotation+" angle="+angle+" speed="+speed);
+
+			if (phones.length > 30) {
+				console.log("Shifting a phone off");
+				var deadmesh = phones.shift();
+				world.DestroyBody(deadmesh.physics);
+				scene.remove(deadmesh);
+			}
+
+		}
+
+		function animate() {
+			requestAnimationFrame(animate);
+			render();
+		}
+
+		function render() {
+			
+			for (var i=0; i<phones.length; i++) {
+				phones[i].position.z = -phones[i].physics.m_position.x*40;
+				phones[i].position.y = (240-phones[i].physics.m_position.y)*10-1500;
+				phones[i].rotation.z = phones[i].physics.m_rotation;
+			}
+
+			renderer.render(scene, camera);
+
+			context2d.clearRect(0, 0, 540, 240);
+			drawWorld(world,context2d);
+		}
+
+		init();
+	</script>
+</body>
+</html>

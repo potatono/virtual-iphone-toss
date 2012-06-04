@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<title>PhoneToss Client</title>
+<style>
+	body {
+		background: -webkit-linear-gradient(bottom, #eeeeee, #cccccc);
+		height: 400px; 
+	}
+	
+	img {
+		display:block;
+		margin: auto;
+		margin-top: 30px;
+	}
+</style>
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes" />  
+<script type="text/javascript" src="socket.io.js"></script>
+<script>
+	var socket = io.connect(':8000');
+	var id = Math.floor(Math.random()*10000000);
+	var lastPing = (new Date()).getTime();
+	var maxForce = 0;
+	var debounce = 0;
+	var t;
+
+	function getForce(e) {
+		var hasGravity = (e.acceleration && true);
+		var acc = e.acceleration || e.accelerationIncludingGravity;
+		var total = acc.x + acc.y + acc.z;
+
+		if (hasGravity) {
+			return total * 140;
+		}
+		else {
+			return (window.orientation < 0 ? total-10 : total+10) * 140;
+		}
+	}
+
+
+	window.setTimeout(function() { socket.emit("rdebug","Client started") }, 1000);
+	//window.setInterval(function() { socket.emit("rdebug"," t="+getForce(lastacc)+" o="+window.orientation) }, 100);
+
+
+	window.ondevicemotion = function(event) {
+		if (event.accelerationIncludingGravity) {
+			var acc = event.accelerationIncludingGravity;
+			var force = getForce(event);
+
+			if (force>1000) {
+				if (force>maxForce) {
+					socket.emit("rdebug","maxForce="+maxForce);
+					maxForce = force;
+				}
+			}
+			else {
+				t = (new Date()).getTime();	
+				if (t > debounce && Math.abs(maxForce) > 0) {
+					socket.emit("toss", id, maxForce);
+					debounce = t + 1000;
+				}
+				maxForce = 0;
+			}
+		}
+	}
+</script>
+</head>
+<body>
+	<img src="iphone-instructions.png">
+
+</body>
+</html>
